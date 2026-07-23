@@ -65,6 +65,11 @@ const Dock = () => {
     const win = windows[app.id];
     if (!win) return;
 
+    if (win.isMinimized) {
+      openWindow(app.id);
+      return;
+    }
+
     if (win.isOpen) {
       closeWindow(app.id);
     } else {
