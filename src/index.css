@@ -121,16 +121,32 @@ body {
   #safari {
     @apply w-4xl absolute top-40 left-2/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
 
+    #window-header {
+      @apply gap-3 justify-start;
+    }
+
     .search {
-      @apply flex items-center gap-3 w-2/3 bg-white border border-gray-300 rounded-lg px-3 py-2;
+      @apply flex flex-1 items-center gap-2 min-w-0 w-auto bg-white border border-gray-300 rounded-lg px-3 py-1.5;
 
       input {
-        @apply placeholder:text-gray-400;
+        @apply flex-1 min-w-0 w-full bg-transparent border-none outline-none text-sm text-gray-700 placeholder:text-gray-400;
+      }
+    }
+
+    .header-actions {
+      @apply flex items-center gap-2 shrink-0;
+
+      .icon-btn {
+        @apply p-0 m-0 bg-transparent border-none cursor-pointer inline-flex items-center justify-center;
+      }
+
+      .copied-feedback {
+        @apply text-xs font-medium text-green-600 whitespace-nowrap mr-1;
       }
     }
 
     .blog {
-      @apply bg-white p-10 max-w-3xl mx-auto;
+      @apply bg-white p-10 max-w-3xl mx-auto max-h-[60vh] overflow-y-auto;
 
       h2 {
         @apply text-xl font-bold text-pink-600 mb-10;
