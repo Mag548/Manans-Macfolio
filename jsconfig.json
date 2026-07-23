@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+      "ignoreDeprecations": "6.0",
+      "baseUrl": ".",
+      "paths": {
+        "#components/*": ["components/*"],
+        "#constants/*": ["constants/*"],
+        "#store/*": ["store/*"],
+        "#hoc/*": ["hoc/*"],
+        "#windows/*": ["windows/*"]
+      }
+    },
+    "include": ["src"]
+  }
