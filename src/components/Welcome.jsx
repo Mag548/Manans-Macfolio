@@ -43,7 +43,7 @@ const setupTextHover = (container, type) => {
         letters.forEach((letter, i) => {
             const { left: l, width: w } = letter.getBoundingClientRect();
             const distance = Math.abs(mouseX - (l - left + w / 2));
-            const intensity = Math.exp(-(distance ** 2) / 2000);
+            const intensity = Math.exp(-(distance ** 2) / 15000);
             const weight = min + (max - min) * intensity;
 
             setters[i](weight);
