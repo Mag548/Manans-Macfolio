@@ -3,6 +3,13 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "imports": {
+    "#components/*": "./src/components/*",
+    "#constants/*": "./src/constants/*",
+    "#store/*": "./src/store/*",
+    "#hoc/*": "./src/hoc/*",
+    "#windows/*": "./src/windows/*"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",

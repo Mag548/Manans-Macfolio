@@ -1,14 +1,14 @@
 {
-    "compilerOptions": {
-      "ignoreDeprecations": "6.0",
-      "baseUrl": ".",
-      "paths": {
-        "#components/*": ["components/*"],
-        "#constants/*": ["constants/*"],
-        "#store/*": ["store/*"],
-        "#hoc/*": ["hoc/*"],
-        "#windows/*": ["windows/*"]
-      }
-    },
-    "include": ["src"]
-  }
+  "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    "baseUrl": ".",
+    "paths": {
+      "#components/*": ["src/components/*"],
+      "#constants/*": ["src/constants/*"],
+      "#store/*": ["src/store/*"],
+      "#hoc/*": ["src/hoc/*"],
+      "#windows/*": ["src/windows/*"]
+    }
+  },
+  "include": ["src"]
+}
