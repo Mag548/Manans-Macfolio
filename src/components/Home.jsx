@@ -129,18 +129,32 @@ const Home = () => {
 
     let cancelled = false;
 
-    const layout = () => {
-      if (cancelled) return;
-      const homeRect = home.getBoundingClientRect();
+    const collectObstacles = (homeRect) => {
       const welcome = toLocalRect(document.getElementById('welcome'), homeRect);
+      const about = toLocalRect(
+        document.querySelector('.welcome-about'),
+        homeRect
+      );
+      const aboutBtn = toLocalRect(
+        document.querySelector('.welcome-about-btn'),
+        homeRect
+      );
       const dock = toLocalRect(document.getElementById('dock'), homeRect);
 
       const obstacles = [
         { left: 0, top: 0, width: homeRect.width, height: NAV_H },
       ];
 
+      // Hero copy (centered)
       if (welcome) {
-        obstacles.push(inflate(welcome, 28, 20));
+        obstacles.push(inflate(welcome, 32, 24));
+      }
+
+      // Specular button sits above the hero — keep folders out from under it
+      if (about) {
+        obstacles.push(inflate(about, 36, 28));
+      } else if (aboutBtn) {
+        obstacles.push(inflate(aboutBtn, 40, 32));
       }
 
       if (dock) {
@@ -154,15 +168,25 @@ const Home = () => {
         });
       }
 
+      return obstacles;
+    };
+
+    const layout = () => {
+      if (cancelled) return;
+      const homeRect = home.getBoundingClientRect();
+      const obstacles = collectObstacles(homeRect);
       setPositions(placeFolders(projects.length, homeRect, obstacles));
     };
 
     const run = () => {
-      if (document.fonts?.ready) {
-        document.fonts.ready.then(layout);
-      } else {
-        layout();
-      }
+      // Wait a frame so the specular button has laid out
+      requestAnimationFrame(() => {
+        if (document.fonts?.ready) {
+          document.fonts.ready.then(layout);
+        } else {
+          layout();
+        }
+      });
     };
 
     run();
@@ -181,9 +205,59 @@ const Home = () => {
       const folders = root.querySelectorAll('.folder');
       if (!folders.length) return;
 
+      const pushOutOfObstacles = (el) => {
+        const homeRect = root.getBoundingClientRect();
+        const obstacles = [
+          toLocalRect(document.getElementById('welcome'), homeRect),
+          toLocalRect(document.querySelector('.welcome-about'), homeRect),
+          toLocalRect(document.querySelector('.welcome-about-btn'), homeRect),
+        ]
+          .filter(Boolean)
+          .map((r) => inflate(r, 28, 22));
+
+        const folderRect = () => {
+          const r = el.getBoundingClientRect();
+          return {
+            left: r.left - homeRect.left,
+            top: r.top - homeRect.top,
+            width: Math.max(r.width, FOLDER_W),
+            height: Math.max(r.height, FOLDER_H),
+          };
+        };
+
+        for (let pass = 0; pass < 4; pass += 1) {
+          const a = folderRect();
+          for (const obs of obstacles) {
+            if (!overlaps(a, obs, GAP)) continue;
+            const overlapBottom = a.top + a.height - obs.top;
+            const overlapTop = obs.top + obs.height - a.top;
+            const overlapRight = a.left + a.width - obs.left;
+            const overlapLeft = obs.left + obs.width - a.left;
+            const x = Number(gsap.getProperty(el, 'x')) || 0;
+            const y = Number(gsap.getProperty(el, 'y')) || 0;
+
+            // Nudge along the smallest escape axis
+            const escapes = [
+              { dx: -overlapRight - GAP, dy: 0 },
+              { dx: overlapLeft + GAP, dy: 0 },
+              { dx: 0, dy: -overlapBottom - GAP },
+              { dx: 0, dy: overlapTop + GAP },
+            ].sort(
+              (p, q) =>
+                Math.abs(p.dx) + Math.abs(p.dy) - (Math.abs(q.dx) + Math.abs(q.dy))
+            );
+            const best = escapes[0];
+            gsap.set(el, { x: x + best.dx, y: y + best.dy });
+          }
+        }
+      };
+
       const instances = Draggable.create(folders, {
         bounds: root,
         zIndexBoost: false,
+        onDragEnd() {
+          pushOutOfObstacles(this.target);
+        },
       });
 
       return () => {
