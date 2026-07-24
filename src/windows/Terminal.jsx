@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import WindowWrapper from '#hoc/WindowWrapper.jsx';
 import WindowControls from '#components/WindowControls.jsx';
 import useWindowStore from '#store/window.js';
@@ -6,14 +7,37 @@ import { BOOT_MESSAGE, runCommand } from '#constants/terminal.js';
 
 const PROMPT = '@manan %';
 
+const snapCommandToTop = (body, commandEl) => {
+  if (!body || !commandEl) return;
+
+  const paddingTop = parseFloat(getComputedStyle(body).paddingTop) || 0;
+  const styles = getComputedStyle(body);
+  const lineGap = parseFloat(styles.rowGap || styles.gap) || 4;
+  // Nudge one line further so the command sits one line higher in the pane
+  const lineNudge = (commandEl.offsetHeight || 20) + lineGap;
+
+  const spacer = body.querySelector('.terminal-scroll-spacer');
+  if (spacer) {
+    spacer.style.height = `${body.clientHeight}px`;
+  }
+
+  void body.offsetHeight;
+  const delta =
+    commandEl.getBoundingClientRect().top -
+    body.getBoundingClientRect().top -
+    paddingTop +
+    lineNudge;
+  body.scrollTop += delta;
+};
+
 const Terminal = () => {
   const isOpen = useWindowStore((s) => s.windows.terminal?.isOpen);
   const isMinimized = useWindowStore((s) => s.windows.terminal?.isMinimized);
   const inputRef = useRef(null);
-  const bottomRef = useRef(null);
+  const bodyRef = useRef(null);
   const [value, setValue] = useState('');
   const [history, setHistory] = useState([
-    { type: 'system', text: BOOT_MESSAGE },
+    { id: 'boot', type: 'system', text: BOOT_MESSAGE },
   ]);
 
   const focusInput = () => {
@@ -21,14 +45,8 @@ const Terminal = () => {
   };
 
   useEffect(() => {
-    if (isOpen && !isMinimized) {
-      focusInput();
-    }
+    if (isOpen && !isMinimized) focusInput();
   }, [isOpen, isMinimized]);
-
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  }, [history, value]);
 
   const submit = (event) => {
     event.preventDefault();
@@ -38,17 +56,38 @@ const Terminal = () => {
       return;
     }
 
-    const echoed = { type: 'input', text: `${PROMPT} ${raw.trim()}` };
+    const commandId = `cmd-${Date.now()}`;
+    const echoed = {
+      id: commandId,
+      type: 'input',
+      text: `${PROMPT} ${raw.trim()}`,
+    };
     const result = runCommand(raw);
 
     if (result.clear) {
-      setHistory([{ type: 'system', text: BOOT_MESSAGE }]);
-      setValue('');
+      flushSync(() => {
+        setHistory([{ id: 'boot', type: 'system', text: BOOT_MESSAGE }]);
+        setValue('');
+      });
+      if (bodyRef.current) bodyRef.current.scrollTop = 0;
       return;
     }
 
-    setHistory((prev) => [...prev, echoed, ...result.lines]);
-    setValue('');
+    const outputLines = result.lines.map((line, i) => ({
+      ...line,
+      id: `${commandId}-out-${i}`,
+    }));
+
+    flushSync(() => {
+      setHistory((prev) => [...prev, echoed, ...outputLines]);
+      setValue('');
+    });
+
+    const body = bodyRef.current;
+    const commandEl = body?.querySelector(`[data-term-id="${commandId}"]`);
+    snapCommandToTop(body, commandEl);
+    // Second pass after paint in case fonts/layout shift
+    requestAnimationFrame(() => snapCommandToTop(body, commandEl));
   };
 
   return (
@@ -58,11 +97,17 @@ const Terminal = () => {
         <h2>Terminal</h2>
       </div>
 
-      <div className="terminal-body" onClick={focusInput}>
-        {history.map((entry, i) => {
+      <div className="terminal-body" ref={bodyRef} onClick={focusInput}>
+        {history.map((entry) => {
+          const className = `terminal-line terminal-${entry.type}`;
+
           if (entry.type === 'link' && entry.href) {
             return (
-              <p key={i} className="terminal-line terminal-link">
+              <p
+                key={entry.id}
+                data-term-id={entry.id}
+                className={`${className} terminal-link`}
+              >
                 <a href={entry.href} target="_blank" rel="noreferrer">
                   {entry.text}
                 </a>
@@ -71,7 +116,7 @@ const Terminal = () => {
           }
 
           return (
-            <p key={i} className={`terminal-line terminal-${entry.type}`}>
+            <p key={entry.id} data-term-id={entry.id} className={className}>
               {entry.text}
             </p>
           );
@@ -89,7 +134,8 @@ const Terminal = () => {
             aria-label="Terminal command"
           />
         </form>
-        <div ref={bottomRef} />
+
+        <div className="terminal-scroll-spacer" aria-hidden />
       </div>
     </>
   );

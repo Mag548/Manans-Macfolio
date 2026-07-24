@@ -1,7 +1,7 @@
 const navLinks = [
     {
       id: 1,
-      name: "Projects",
+      name: "Experiences",
       type: "finder",
     },
     {
@@ -245,70 +245,57 @@ const navLinks = [
     photosLinks,
   };
   
-  const WORK_LOCATION = {
+  const EXPERIENCES_LOCATION = {
     id: 1,
-    type: "work",
-    name: "Work",
+    type: "experiences",
+    name: "Experiences",
     icon: "/icons/work.svg",
     kind: "folder",
     children: [
-      // ▶ Project 1
+      // ▶ JA Canada
       {
         id: 5,
-        name: "Nike Ecommerce Website Application",
+        name: "VP of Technology — JA Canada",
         icon: "/images/folder.png",
         kind: "folder",
-        position: "top-10 left-5", // icon position inside Finder
-        windowPosition: "top-[5vh] left-5", // optional: Finder window position
+        position: "top-10 left-5",
+        windowPosition: "top-[5vh] left-5",
         children: [
           {
             id: 1,
-            name: "Nike Project.txt",
+            name: "JA Canada Experience.txt",
             icon: "/images/txt.png",
             kind: "file",
             fileType: "txt",
             position: "top-5 left-10",
+            subtitle: "Vice President of Technology · Internship",
             description: [
-              "The Nike eCommerce website is a sleek and modern platform designed for shopping the latest Nike collections.",
-              "Instead of a simple online store, it delivers an immersive experience with bold visuals, interactive product displays, and smooth navigation.",
-              "Think of it like walking into a flagship Nike store—but right from your phone or laptop.",
-              "It's built with Next.js and Tailwind, ensuring fast performance, responsive design, and a clean, premium look.",
+              "JA Canada · Nov 2025 – Jul 2026 · 9 mos · Burlington, Ontario · Hybrid",
+              "Elected Vice President of Technology for a student-run startup of 25 students after pitching the product concept that was ultimately selected from over 25 competing ideas. Led the company's technological initiatives, including website development, digital marketing, product technology integration, and cross-functional collaboration with marketing, finance, and operations teams.",
+              "• Developed and launched the company website, creating a centralized platform for brand awareness, product information, and customer engagement.",
+              "• Led content creation, video editing, and digital marketing initiatives that helped QuickFix become the first JA Ontario company to reach 300, 500, and 800 Instagram followers.",
+              "• Proposed and helped implement NFC technology within the product, creating an interactive user experience and strengthening the product's value proposition.",
+              "• Utilized CAD software to create product prototypes that demonstrated feasibility, supported product selection, and guided design decisions throughout development.",
+              "• Awarded the Leadership in Technology Award for innovation, technical leadership, and contributions to company growth.",
+              "Key Skills: Technology Leadership, Web Development, Digital Marketing, Content Creation, CAD Design, Product Development, Team Leadership, Entrepreneurship, Social Media Strategy",
             ],
           },
           {
             id: 2,
-            name: "nike.com",
-            icon: "/images/safari.png",
-            kind: "file",
-            fileType: "url",
-            href: "https://youtu.be/fZdTYswuZjU?si=Awjl-pIst9e09_UU",
-            position: "top-10 right-20",
-          },
-          {
-            id: 4,
-            name: "nike.png",
+            name: "ja-canada.png",
             icon: "/images/image.png",
             kind: "file",
             fileType: "img",
-            position: "top-52 right-80",
+            position: "top-40 left-48",
             imageUrl: "/images/project-1.png",
-          },
-          {
-            id: 5,
-            name: "Design.fig",
-            icon: "/images/plain.png",
-            kind: "file",
-            fileType: "fig",
-            href: "https://google.com",
-            position: "top-60 right-20",
           },
         ],
       },
-  
-      // ▶ Project 2
+
+      // ▶ Volvo Cars
       {
         id: 6,
-        name: "AI Resume Analyzer",
+        name: "Assistant Technician — Volvo Cars",
         icon: "/images/folder.png",
         kind: "folder",
         position: "top-52 right-80",
@@ -316,52 +303,35 @@ const navLinks = [
         children: [
           {
             id: 1,
-            name: "AI Resume Analyzer Project.txt",
+            name: "Volvo Cars Experience.txt",
             icon: "/images/txt.png",
             kind: "file",
             fileType: "txt",
             position: "top-5 right-10",
+            subtitle: "Assistant Technician · Co-op",
             description: [
-              "AI Resume Analyzer is a smart tool that helps you perfect your resume with instant feedback.",
-              "Instead of guessing what recruiters want, you get AI-powered insights on keywords, formatting, and overall impact.",
-              "Think of it like having a career coach—pointing out strengths, fixing weaknesses, and boosting your chances of landing interviews.",
-              "It's built with Next.js and Tailwind, so it runs fast, looks professional, and works seamlessly on any device.",
+              "Volvo Cars · Jan 2026 – Jun 2026 · 6 mos · Oakville, Ontario · On-site",
+              "Worked alongside Volvo service technicians to assist with vehicle maintenance and repairs. Performed oil changes, tire rotations, tire mounting and balancing, and general vehicle inspections while ensuring work was completed safely and efficiently.",
+              "Gained hands-on experience with automotive engineering systems, shop equipment, and dealership service operations while developing strong mechanical, problem-solving, and teamwork skills in a professional environment.",
+              "Key Skills: Automotive Service, Mechanical Skills, Problem Solving, Teamwork, Shop Operations",
             ],
           },
           {
             id: 2,
-            name: "ai-resume-analyzer.com",
-            icon: "/images/safari.png",
-            kind: "file",
-            fileType: "url",
-            href: "https://youtu.be/iYOz165wGkQ?si=R1hs8Legl200m0Cl",
-            position: "top-20 left-20",
-          },
-          {
-            id: 4,
-            name: "ai-resume-analyzer.png",
+            name: "volvo-cars.png",
             icon: "/images/image.png",
             kind: "file",
             fileType: "img",
-            position: "top-52 left-80",
+            position: "top-40 left-48",
             imageUrl: "/images/project-2.png",
-          },
-          {
-            id: 5,
-            name: "Design.fig",
-            icon: "/images/plain.png",
-            kind: "file",
-            fileType: "fig",
-            href: "https://google.com",
-            position: "top-60 left-5",
           },
         ],
       },
-  
-      // ▶ Project 3
+
+      // ▶ FinNova Hacks
       {
         id: 7,
-        name: "Food Delivery App",
+        name: "Head of Marketing — FinNova Hacks",
         icon: "/images/folder.png",
         kind: "folder",
         position: "top-10 left-80",
@@ -369,44 +339,66 @@ const navLinks = [
         children: [
           {
             id: 1,
-            name: "Food Delivery App Project.txt",
+            name: "FinNova Hacks Experience.txt",
             icon: "/images/txt.png",
             kind: "file",
             fileType: "txt",
             position: "top-5 left-10",
+            subtitle: "Head of Marketing · Self-employed",
             description: [
-              "Our Food Delivery App is a fast and convenient way to order meals from your favorite restaurants.",
-              "Instead of making calls or waiting in line, you can browse menus, customize orders, and track deliveries in real time.",
-              "Think of it like having your favorite restaurants in your pocket—ready to deliver anytime, anywhere.",
-              "It’s built with React Native, so it works smoothly on both iOS and Android with a clean, modern design.",
+              "FinNova Hacks · Jul 2025 – Mar 2026 · 9 mos · Mississauga, Ontario · Hybrid",
+              "Led marketing efforts for FinNova Hacks, driving brand visibility and event engagement across digital channels.",
+              "Focused on advertising, business marketing, and campaign coordination to grow audience reach and support hackathon recruitment and community building.",
+              "Key Skills: Advertising, Business Marketing, Brand Strategy, Social Media, Event Promotion, Communication",
             ],
           },
           {
             id: 2,
-            name: "food-delivery-app.com",
-            icon: "/images/safari.png",
-            kind: "file",
-            fileType: "url",
-            href: "https://youtu.be/LKrX390fJMw?si=cExkuVhf2DTV9G2-",
-            position: "top-10 right-20",
-          },
-          {
-            id: 4,
-            name: "food-delivery-app.png",
+            name: "finnova-hacks.png",
             icon: "/images/image.png",
             kind: "file",
             fileType: "img",
-            position: "top-52 right-80",
+            position: "top-40 left-48",
             imageUrl: "/images/project-3.png",
           },
+        ],
+      },
+
+      // ▶ Big Brothers Big Sisters
+      {
+        id: 8,
+        name: "Student Mentor — Big Brothers Big Sisters",
+        icon: "/images/folder.png",
+        kind: "folder",
+        position: "top-60 left-20",
+        windowPosition: "top-[40vh] left-10",
+        children: [
           {
-            id: 5,
-            name: "Design.fig",
-            icon: "/images/plain.png",
+            id: 1,
+            name: "BBBS Experience.txt",
+            icon: "/images/txt.png",
             kind: "file",
-            fileType: "fig",
-            href: "https://google.com",
-            position: "top-60 right-20",
+            fileType: "txt",
+            position: "top-5 left-10",
+            subtitle: "Student Mentor · Permanent Part-time",
+            description: [
+              "Big Brothers Big Sisters of Canada · Sep 2022 – May 2025 · 2 yrs 9 mos · Oakville, Ontario · On-site",
+              "Supported elementary and middle school students through weekly homework sessions, helping create a positive learning environment and encouraging academic confidence and independence.",
+              "• Mentored students across multiple grade levels, helping improve homework completion and classroom preparedness through one-on-one academic support.",
+              "• Facilitated engaging learning activities and study sessions that encouraged participation and strengthened problem-solving skills.",
+              "• Built positive relationships with students and families by providing consistent guidance and encouragement throughout the school year.",
+              "• Collaborated with fellow mentors and program coordinators to maintain a welcoming and inclusive environment for all participants.",
+              "Key Skills: Mentorship, Communication, Leadership, Youth Development, Problem Solving, Teamwork",
+            ],
+          },
+          {
+            id: 2,
+            name: "bbbs.png",
+            icon: "/images/image.png",
+            kind: "file",
+            fileType: "img",
+            position: "top-40 left-48",
+            imageUrl: "/images/gal1.png",
           },
         ],
       },
@@ -427,7 +419,7 @@ const navLinks = [
         kind: "file",
         fileType: "img",
         position: "top-10 left-5",
-        imageUrl: "/images/adrian.jpg",
+        imageUrl: "/images/manan.jpg",
       },
       {
         id: 2,
@@ -454,13 +446,13 @@ const navLinks = [
         kind: "file",
         fileType: "txt",
         position: "top-60 left-5",
-        subtitle: "Meet the Developer Behind the Code",
-        image: "/images/adrian.jpg",
+        subtitle: "Meet the Developer Behind the Site",
+        image: "/images/manan.jpg",
         description: [
-          "Hey! I’m Adrian 👋, a web developer who enjoys building sleek, interactive websites that actually work well.",
-          "I specialize in JavaScript, React, and Next.js—and I love making things feel smooth, fast, and just a little bit delightful.",
-          "I’m big on clean UI, good UX, and writing code that doesn’t need a search party to debug.",
-          "Outside of dev work, you'll find me tweaking layouts at 2AM, sipping overpriced coffee, or impulse-buying gadgets I absolutely convinced myself I needed 😅",
+          "Hey! I'm Manan 👋",
+          "I'm a Computer Science and Business student at Wilfrid Laurier University who loves turning ideas into real products. Whether it's developing web applications, exploring AI, or designing intuitive user experiences, I'm always looking for opportunities to learn and build.",
+          "Outside of coding, you'll probably find me behind a camera capturing cars and landscapes, on the badminton court, or planning my next project. I enjoy solving problems, collaborating with others, and creating things that make a meaningful impact.",
+          "I'm always excited to connect with people who are passionate about technology, entrepreneurship, and building something great together.",
         ],
       },
     ],
@@ -514,7 +506,7 @@ const navLinks = [
   };
   
   export const locations = {
-    work: WORK_LOCATION,
+    experiences: EXPERIENCES_LOCATION,
     about: ABOUT_LOCATION,
     resume: RESUME_LOCATION,
     trash: TRASH_LOCATION,

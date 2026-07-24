@@ -65,7 +65,7 @@ const Finder = () => {
       <div className="window-body flex h-full min-h-0">
         <div className="sidebar">
           {renderList('Favourites', Object.values(locations))}
-          {renderList('Work', locations.work.children)}
+          {renderList('Experiences', locations.experiences.children)}
         </div>
 
         <ul className="content">

@@ -470,6 +470,7 @@ body {
 
   #terminal {
     @apply w-xl max-w-[calc(100vw-1.5rem)] absolute top-32 left-[max(0.75rem,8.333%)] bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    height: min(28rem, calc(100dvh - 9rem));
     max-height: calc(100dvh - 9rem);
 
     #window-header {
@@ -481,8 +482,10 @@ body {
     }
 
     .terminal-body {
-      @apply flex-1 min-h-0 overflow-y-auto px-5 py-5 space-y-1 text-sm font-roboto;
-      min-height: 22rem;
+      @apply relative min-h-0 overflow-x-hidden overflow-y-auto px-5 py-5 space-y-1 text-sm font-roboto;
+      flex: 1 1 0;
+      height: 0;
+      overflow-anchor: none;
     }
 
     .terminal-line {
@@ -519,6 +522,12 @@ body {
       input {
         @apply flex-1 min-w-0 bg-transparent border-none outline-none text-sm font-roboto text-gray-900 caret-[#00A154];
       }
+    }
+
+    .terminal-scroll-spacer {
+      flex-shrink: 0;
+      width: 100%;
+      pointer-events: none;
     }
   }
 

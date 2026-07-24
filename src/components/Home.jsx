@@ -8,7 +8,7 @@ import useLocationStore from '#store/location.js';
 
 gsap.registerPlugin(Draggable);
 
-const projects = locations.work?.children ?? [];
+const projects = locations.experiences?.children ?? [];
 
 const FOLDER_W = 176;
 const FOLDER_H = 118;
