@@ -20,10 +20,12 @@ const navLinks = [
     {
       id: 1,
       img: "/icons/wifi.svg",
+      type: "wifi",
     },
     {
       id: 2,
       img: "/icons/search.svg",
+      type: "spotlight",
     },
     {
       id: 3,
@@ -32,8 +34,45 @@ const navLinks = [
     {
       id: 4,
       img: "/icons/mode.svg",
+      type: "mode",
     },
   ];
+
+  const wifiNetworks = {
+    personalHotspots: [
+      {
+        id: "manan-hotspot",
+        name: "Manan's Hotspot",
+        kind: "hotspot",
+        signal: 3,
+        cellular: "5G",
+        battery: 0.9,
+      },
+    ],
+    knownNetworks: [
+      {
+        id: "arpita-iphone",
+        name: "404 Network Not Found",
+        kind: "wifi",
+        locked: true,
+        signal: 3,
+      },
+      {
+        id: "ghosla-guest",
+        name: "FBI Surveillance Van 4",
+        kind: "wifi",
+        locked: true,
+        signal: 2,
+      },
+      {
+        id: "coffee-shop",
+        name: "Wu Tang LAN",
+        kind: "wifi",
+        locked: true,
+        signal: 2,
+      },
+    ],
+  };
   
   const dockApps = [
     {
@@ -132,28 +171,28 @@ const navLinks = [
       text: "Github",
       icon: "/icons/github.svg",
       bg: "#f4656b",
-      link: "https://github.com/JavaScript-Mastery-Pro",
+      link: "https://github.com/Mag548/",
     },
     {
       id: 2,
-      text: "Platform",
+      text: "Photography",
       icon: "/icons/atom.svg",
       bg: "#4bcb63",
-      link: "https://jsmastery.com/",
+      link: "https://google.com/",
     },
     {
       id: 3,
-      text: "Twitter/X",
+      text: "Instagram",
       icon: "/icons/twitter.svg",
       bg: "#ff866b",
-      link: "https://x.com/jsmasterypro",
-    },
+      link: "https://www.instagram.com/manan_548/?hl=en",
+    },  
     {
       id: 4,
       text: "LinkedIn",
       icon: "/icons/linkedin.svg",
       bg: "#05b6f6",
-      link: "https://www.linkedin.com/company/javascriptmastery/posts/?feedView=all",
+      link: "https://www.linkedin.com/in/manan-goswami-684b5595/",
     },
   ];
   
@@ -162,57 +201,48 @@ const navLinks = [
       id: 1,
       icon: "/icons/gicon1.svg",
       title: "Library",
+      photos: [
+        { id: 1, name: "Photo 1", imageUrl: "/images/gal1.png" },
+        { id: 2, name: "Photo 2", imageUrl: "/images/gal2.png" },
+        { id: 3, name: "Photo 3", imageUrl: "/images/gal3.png" },
+        { id: 4, name: "Photo 4", imageUrl: "/images/gal4.png" },
+      ],
     },
     {
       id: 2,
       icon: "/icons/gicon2.svg",
       title: "Memories",
+      photos: [],
     },
     {
       id: 3,
       icon: "/icons/file.svg",
       title: "Places",
+      photos: [],
     },
     {
       id: 4,
       icon: "/icons/gicon4.svg",
       title: "People",
+      photos: [],
     },
     {
       id: 5,
       icon: "/icons/gicon5.svg",
       title: "Favorites",
-    },
-  ];
-  
-  const gallery = [
-    {
-      id: 1,
-      img: "/images/gal1.png",
-    },
-    {
-      id: 2,
-      img: "/images/gal2.png",
-    },
-    {
-      id: 3,
-      img: "/images/gal3.png",
-    },
-    {
-      id: 4,
-      img: "/images/gal4.png",
+      photos: [],
     },
   ];
   
   export {
     navLinks,
     navIcons,
+    wifiNetworks,
     dockApps,
     blogPosts,
     techStack,
     socials,
     photosLinks,
-    gallery,
   };
   
   const WORK_LOCATION = {
@@ -464,21 +494,21 @@ const navLinks = [
     children: [
       {
         id: 1,
-        name: "trash1.png",
+        name: "trash-player.png",
         icon: "/images/image.png",
         kind: "file",
         fileType: "img",
         position: "top-10 left-10",
-        imageUrl: "/images/trash-1.png",
+        imageUrl: "/images/trash-player.jpeg",
       },
       {
         id: 2,
-        name: "trash2.png",
+        name: "trash-artist.png",
         icon: "/images/image.png",
         kind: "file",
         fileType: "img",
         position: "top-40 left-80",
-        imageUrl: "/images/trash-2.png",
+        imageUrl: "/images/trash-2.webp",
       },
     ],
   };
@@ -500,7 +530,6 @@ const navLinks = [
     photos: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null },
     terminal: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null },
     txtfile: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null },
-    imgfile: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null },
   };
   
   export { INITIAL_Z_INDEX, WINDOW_CONFIG };

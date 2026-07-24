@@ -2,6 +2,25 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { INITIAL_Z_INDEX, WINDOW_CONFIG } from '#constants/index.js';
 
+const createWindowState = (overrides = {}) => ({
+  isOpen: false,
+  isMinimized: false,
+  isMaximized: false,
+  zIndex: INITIAL_Z_INDEX,
+  data: null,
+  offsetX: 0,
+  offsetY: 0,
+  ...overrides,
+});
+
+export const getImgWindowKey = (item) => {
+  const source = item?.imageUrl || item?.img || item?.id || 'image';
+  const slug = String(source)
+    .replace(/^\/images\//, '')
+    .replace(/\W+/g, '-');
+  return `imgfile-${slug}`;
+};
+
 const useWindowStore = create(
   immer((set) => ({
     windows: WINDOW_CONFIG,
@@ -9,6 +28,16 @@ const useWindowStore = create(
 
     openWindow: (windowKey, data = null) =>
       set((state) => {
+        if (!state.windows[windowKey]) {
+          const openImages = Object.keys(state.windows).filter((key) =>
+            key.startsWith('imgfile-')
+          ).length;
+          state.windows[windowKey] = createWindowState({
+            offsetX: openImages * 28,
+            offsetY: openImages * 28,
+          });
+        }
+
         const win = state.windows[windowKey];
         if (!win) return;
         win.isOpen = true;

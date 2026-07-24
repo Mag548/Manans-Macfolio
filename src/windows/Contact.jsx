@@ -10,15 +10,15 @@ const Contact = () => {
         <h2>Contact Me</h2>
       </div>
 
-      <div className="p-5 space-y-5">
+      <div className="p-5 space-y-2">
         <img
-          src="/images/adrian.jpg"
+          src="/images/manan.jpg"
           alt="Manan"
-          className="w-20 rounded-full"
+          className="w-30 rounded"
         />
 
-        <h3>Let's Connect</h3>
-        <p>Got an idea? A bug to squash? Or just want to talk tech? I'm in.</p>
+        <h3>Get in Touch!</h3>
+        <p>Got an idea, a project to build, or just want to talk tech? Let's connect.</p>
         <p>Email: manangoswami5@gmail.com</p>
         <p>Phone: +1 289 993-9991</p>
         <ul>

@@ -2,7 +2,7 @@ import { SearchIcon } from 'lucide-react';
 import WindowWrapper from '#hoc/WindowWrapper.jsx';
 import WindowControls from '#components/WindowControls.jsx';
 import useLocationStore from '#store/location.js';
-import useWindowStore from '#store/window.js';
+import useWindowStore, { getImgWindowKey } from '#store/window.js';
 import { locations } from '#constants';
 
 const Finder = () => {
@@ -31,7 +31,7 @@ const Finder = () => {
     }
 
     if (item.fileType === 'img') {
-      openWindow('imgfile', item);
+      openWindow(getImgWindowKey(item), item);
     }
   };
 
@@ -62,7 +62,7 @@ const Finder = () => {
         <SearchIcon className="icon" />
       </div>
 
-      <div className="bg-white flex h-full min-h-0">
+      <div className="window-body flex h-full min-h-0">
         <div className="sidebar">
           {renderList('Favourites', Object.values(locations))}
           {renderList('Work', locations.work.children)}
