@@ -406,32 +406,21 @@ body {
     }
 
     .welcome-about-panel {
-      @apply absolute top-[calc(100%+0.85rem)] left-1/2 -translate-x-1/2 z-30 rounded-2xl border border-white/20 px-6 py-5 text-left;
+      @apply absolute top-[calc(100%+0.85rem)] left-1/2 -translate-x-1/2 z-30 rounded-2xl border border-white/40 bg-white/50 backdrop-blur-3xl px-6 py-5 text-left shadow-xl;
       width: min(40rem, calc(100vw - 2rem));
       max-height: min(52vh, 28rem);
       overflow-y: auto;
-      background: linear-gradient(
-        165deg,
-        rgba(255, 255, 255, 0.18) 0%,
-        rgba(255, 255, 255, 0.06) 45%,
-        rgba(12, 12, 18, 0.55) 100%
-      );
-      backdrop-filter: blur(22px) saturate(160%);
-      -webkit-backdrop-filter: blur(22px) saturate(160%);
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.28),
-        0 18px 48px rgba(0, 0, 0, 0.35);
 
       h3 {
-        @apply m-0 mb-2 text-base font-semibold text-white;
+        @apply m-0 mb-2 text-base font-semibold text-gray-900;
       }
 
       p {
-        @apply m-0 mb-3 text-sm leading-relaxed text-white/80;
+        @apply m-0 mb-3 text-sm leading-relaxed text-gray-700;
       }
 
       h4 {
-        @apply m-0 mb-2 mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-white/45;
+        @apply m-0 mb-2 mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-gray-500;
       }
     }
 
@@ -440,10 +429,10 @@ body {
       grid-template-columns: repeat(2, minmax(0, 1fr));
 
       li {
-        @apply flex flex-col gap-0.5 text-xs text-white/75 min-w-0;
+        @apply flex flex-col gap-0.5 text-xs text-gray-700 min-w-0;
 
         span:first-child {
-          @apply w-auto font-medium text-white/45;
+          @apply w-auto font-medium text-gray-500;
         }
       }
     }
