@@ -66,6 +66,59 @@ body {
     @apply p-1 hover:bg-gray-200 rounded hover:cursor-default;
   }
 
+  .window-frame {
+    @apply relative;
+  }
+
+  .zoom-controls {
+    @apply flex items-center gap-0.5 mr-1;
+
+    .zoom-btn {
+      @apply inline-flex items-center justify-center size-7 rounded border-none bg-transparent text-gray-500 cursor-pointer hover:bg-gray-200 hover:text-gray-800;
+    }
+
+    .zoom-label {
+      @apply min-w-12 px-1 text-xs font-medium tabular-nums;
+    }
+  }
+
+  .window-resize-handle {
+    @apply absolute z-30;
+    /* slightly larger hit area than the visual edge */
+  }
+
+  .window-resize-handle.n {
+    @apply top-0 left-2 right-2 h-1.5;
+  }
+
+  .window-resize-handle.s {
+    @apply bottom-0 left-2 right-2 h-1.5;
+  }
+
+  .window-resize-handle.e {
+    @apply right-0 top-2 bottom-2 w-1.5;
+  }
+
+  .window-resize-handle.w {
+    @apply left-0 top-2 bottom-2 w-1.5;
+  }
+
+  .window-resize-handle.ne {
+    @apply top-0 right-0 size-3;
+  }
+
+  .window-resize-handle.nw {
+    @apply top-0 left-0 size-3;
+  }
+
+  .window-resize-handle.se {
+    @apply bottom-0 right-0 size-3;
+  }
+
+  .window-resize-handle.sw {
+    @apply bottom-0 left-0 size-3;
+  }
+
   #welcome {
     @apply text-gray-200 flex flex-col justify-center items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none max-sm:h-screen max-sm:w-full max-sm:px-10;
 
@@ -115,14 +168,14 @@ body {
   }
 
   #window-header {
-    @apply flex items-center justify-between px-4 py-3 rounded-t-lg bg-gray-50 border-b border-gray-200 select-none text-sm text-gray-400;
+    @apply flex items-center justify-between px-4 py-3 rounded-t-lg bg-gray-50 border-b border-gray-200 select-none text-sm text-gray-400 cursor-grab active:cursor-grabbing;
   }
 
   #safari {
     @apply w-4xl absolute top-40 left-2/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
 
     #window-header {
-      @apply gap-3 justify-start;
+      @apply shrink-0 gap-3 justify-start;
     }
 
     .search {
@@ -146,7 +199,7 @@ body {
     }
 
     .blog {
-      @apply bg-white p-10 max-w-3xl mx-auto max-h-[60vh] overflow-y-auto;
+      @apply flex-1 min-h-0 bg-white p-10 max-w-3xl w-full mx-auto overflow-y-auto;
 
       h2 {
         @apply text-xl font-bold text-pink-600 mb-10;
@@ -181,12 +234,16 @@ body {
   #terminal {
     @apply w-xl absolute top-32 left-1/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
 
+    #window-header {
+      @apply shrink-0;
+    }
+
     h2 {
       @apply font-bold text-sm text-center w-full;
     }
 
     .techstack {
-      @apply text-sm font-roboto p-5;
+      @apply flex-1 min-h-0 overflow-y-auto text-sm font-roboto p-5;
 
       .label {
         @apply flex items-center ms-10 mt-7;
@@ -313,17 +370,71 @@ body {
   }
 
   #resume {
-    @apply w-fit h-fit absolute top-16 left-7/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    /* Tall letter-shaped window: nav → dock, horizontally centered */
+    @apply absolute top-14 bottom-24 left-0 right-0 mx-auto bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    width: min(52rem, calc((100dvh - 9.5rem) * 8.5 / 11));
 
     #window-header {
+      @apply shrink-0 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2;
+
+      .header-side {
+        @apply flex items-center gap-1.5 min-w-0;
+      }
+
+      .header-side-left {
+        @apply justify-self-start;
+      }
+
+      .header-side-right {
+        @apply justify-self-end;
+      }
+
       h2 {
-        @apply font-bold text-sm text-center flex-1;
+        @apply relative left-auto translate-x-0 font-bold text-sm text-center whitespace-nowrap pointer-events-none;
+      }
+
+      .reset-size-btn {
+        @apply shrink-0 px-2 py-1 rounded-md border-none bg-transparent text-xs font-medium text-gray-500 cursor-pointer hover:bg-gray-200 hover:text-gray-800;
+      }
+    }
+
+    .resume-body {
+      @apply flex-1 flex min-h-0 w-full items-center justify-center overflow-hidden bg-gray-100;
+
+      &.is-zoomed {
+        @apply overflow-auto items-start justify-center py-3;
+      }
+
+      .react-pdf__Document {
+        @apply flex items-center justify-center max-w-none max-h-none;
+      }
+
+      .pdf-zoom-shell {
+        @apply relative shrink-0;
+      }
+
+      .pdf-zoom-layer {
+        @apply origin-top-left will-change-transform;
+      }
+
+      .react-pdf__Page {
+        @apply shadow-sm;
+      }
+
+      .resume-loading {
+        @apply text-sm text-gray-400;
+      }
+    }
+
+    &.is-maximized {
+      .resume-body {
+        @apply bg-gray-100;
       }
     }
   }
 
   #finder {
-    @apply absolute w-3xl left-40 top-20 shadow-2xl drop-shadow-2xl overflow-hidden rounded-xl;
+    @apply absolute w-3xl left-40 top-20 bg-white shadow-2xl drop-shadow-2xl overflow-hidden rounded-xl;
 
     .sidebar {
       @apply w-48 bg-gray-50 border-r border-gray-200 flex flex-col p-5 space-y-3;
@@ -367,27 +478,51 @@ body {
   }
 
   #txtfile {
-    @apply w-md absolute top-36 right-32 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply absolute top-36 right-32 w-lg max-w-[90vw] bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    max-height: min(85vh, calc(100dvh - 6rem));
 
-    h2 {
-      @apply font-bold text-sm text-center w-full;
+    #window-header {
+      @apply shrink-0;
+
+      h2 {
+        @apply font-bold text-sm text-center w-full truncate px-2;
+      }
+    }
+
+    .txtfile-body {
+      @apply flex-1 min-h-0 p-6 space-y-4 overflow-y-auto text-sm text-gray-700 leading-relaxed;
+
+      .txtfile-image {
+        @apply block w-full h-auto max-h-80 object-contain object-top rounded-lg bg-gray-50;
+      }
+
+      .txtfile-subtitle {
+        @apply text-base font-semibold text-gray-900;
+      }
+
+      p {
+        @apply text-gray-600;
+      }
     }
   }
 
   #imgfile {
-    @apply w-xl absolute top-40 left-2/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply absolute top-40 left-2/12 w-xl max-w-[90vw] bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    max-height: min(85vh, calc(100dvh - 6rem));
 
     #window-header {
-      p {
-        @apply font-bold text-[#5f6266];
+      @apply shrink-0;
+
+      h2 {
+        @apply font-bold text-sm text-center w-full truncate px-2 text-[#5f6266];
       }
     }
 
     .preview {
-      @apply p-2 bg-gray-200 max-h-[70vh];
+      @apply flex-1 min-h-0 p-2 bg-gray-200 overflow-auto;
 
       img {
-        @apply w-full h-fit object-contain object-center;
+        @apply w-full h-auto max-h-[min(70vh,calc(100dvh-10rem))] object-contain object-center mx-auto;
       }
     }
   }
