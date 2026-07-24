@@ -10,11 +10,10 @@ gsap.registerPlugin(Draggable);
 
 const projects = locations.experiences?.children ?? [];
 
-const FOLDER_W = 176;
-const FOLDER_H = 118;
-const GAP = 20;
+const CELL_W = 200;
+const CELL_H = 128;
+const GAP = 24;
 const NAV_H = 56;
-const MAX_ATTEMPTS = 250;
 
 const overlaps = (a, b, gap = GAP) =>
   !(
@@ -45,63 +44,47 @@ const toLocalRect = (el, homeRect) => {
 const collidesAny = (candidate, rects) =>
   rects.some((rect) => overlaps(candidate, rect));
 
+/** Deterministic grid — never random — so experience folders cannot overlap. */
 const placeFolders = (count, homeRect, obstacles) => {
-  const placed = [];
   const minLeft = GAP;
   const minTop = NAV_H + GAP;
-  const maxLeft = Math.max(minLeft, homeRect.width - FOLDER_W - GAP);
-  const maxTop = Math.max(minTop, homeRect.height - FOLDER_H - GAP);
+  const maxLeft = Math.max(minLeft, homeRect.width - CELL_W - GAP);
+  const maxTop = Math.max(minTop, homeRect.height - CELL_H - GAP);
 
+  const stepX = CELL_W + GAP;
+  const stepY = CELL_H + GAP;
+  const cols = Math.max(1, Math.floor((maxLeft - minLeft) / stepX) + 1);
+  const rows = Math.max(1, Math.floor((maxTop - minTop) / stepY) + 1);
+
+  // Prefer a right-side column (classic desktop), then fill leftward.
+  const slots = [];
+  for (let col = cols - 1; col >= 0; col -= 1) {
+    for (let row = 0; row < rows; row += 1) {
+      slots.push({
+        left: Math.min(maxLeft, minLeft + col * stepX),
+        top: Math.min(maxTop, minTop + row * stepY),
+        width: CELL_W,
+        height: CELL_H,
+      });
+    }
+  }
+
+  const placed = [];
   for (let i = 0; i < count; i += 1) {
     let found = null;
-
-    for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
-      const left = minLeft + Math.random() * (maxLeft - minLeft);
-      const top = minTop + Math.random() * (maxTop - minTop);
-      const candidate = {
-        left,
-        top,
-        width: FOLDER_W,
-        height: FOLDER_H,
-      };
-
-      if (!collidesAny(candidate, obstacles) && !collidesAny(candidate, placed)) {
-        found = candidate;
+    for (const slot of slots) {
+      if (!collidesAny(slot, obstacles) && !collidesAny(slot, placed)) {
+        found = slot;
         break;
-      }
-    }
-
-    if (!found) {
-      // Fallback: walk a loose grid from the edges inward
-      const cols = Math.max(2, Math.floor((maxLeft - minLeft) / (FOLDER_W + GAP)));
-      const rows = Math.max(2, Math.floor((maxTop - minTop) / (FOLDER_H + GAP)));
-      outer: for (let row = 0; row < rows; row += 1) {
-        for (let col = 0; col < cols; col += 1) {
-          const candidate = {
-            left: minLeft + col * (FOLDER_W + GAP),
-            top: minTop + row * (FOLDER_H + GAP),
-            width: FOLDER_W,
-            height: FOLDER_H,
-          };
-          if (
-            candidate.left <= maxLeft &&
-            candidate.top <= maxTop &&
-            !collidesAny(candidate, obstacles) &&
-            !collidesAny(candidate, placed)
-          ) {
-            found = candidate;
-            break outer;
-          }
-        }
       }
     }
 
     placed.push(
       found ?? {
-        left: minLeft + (i % 3) * (FOLDER_W + GAP),
-        top: minTop + Math.floor(i / 3) * (FOLDER_H + GAP),
-        width: FOLDER_W,
-        height: FOLDER_H,
+        left: minLeft,
+        top: minTop + i * stepY,
+        width: CELL_W,
+        height: CELL_H,
       }
     );
   }
@@ -110,6 +93,48 @@ const placeFolders = (count, homeRect, obstacles) => {
     top: `${Math.round(top)}px`,
     left: `${Math.round(left)}px`,
   }));
+};
+
+const getFolderLocalRect = (el, homeRect) => {
+  const r = el.getBoundingClientRect();
+  return {
+    left: r.left - homeRect.left,
+    top: r.top - homeRect.top,
+    width: Math.max(r.width, CELL_W),
+    height: Math.max(r.height, CELL_H),
+  };
+};
+
+const separateFolders = (folders, home) => {
+  const homeRect = home.getBoundingClientRect();
+  const maxLeft = homeRect.width - CELL_W - GAP;
+  const maxTop = homeRect.height - CELL_H - GAP;
+
+  for (let pass = 0; pass < 6; pass += 1) {
+    for (let i = 0; i < folders.length; i += 1) {
+      for (let j = i + 1; j < folders.length; j += 1) {
+        const a = getFolderLocalRect(folders[i], homeRect);
+        const b = getFolderLocalRect(folders[j], homeRect);
+        if (!overlaps(a, b, GAP)) continue;
+
+        const xA = Number(gsap.getProperty(folders[i], 'x')) || 0;
+        const yA = Number(gsap.getProperty(folders[i], 'y')) || 0;
+        const push = CELL_H + GAP - (b.top - a.top);
+        if (push > 0) {
+          const nextY = Math.min(maxTop - a.top + yA, yA + push);
+          gsap.set(folders[j], {
+            x: Number(gsap.getProperty(folders[j], 'x')) || 0,
+            y: nextY,
+          });
+        } else {
+          gsap.set(folders[j], {
+            x: Math.min(maxLeft - b.left + (Number(gsap.getProperty(folders[j], 'x')) || 0), xA + CELL_W + GAP),
+            y: Number(gsap.getProperty(folders[j], 'y')) || 0,
+          });
+        }
+      }
+    }
+  }
 };
 
 const Home = () => {
@@ -184,6 +209,9 @@ const Home = () => {
       const instances = Draggable.create(folders, {
         bounds: root,
         zIndexBoost: false,
+        onDragEnd() {
+          separateFolders(folders, root);
+        },
       });
 
       return () => {

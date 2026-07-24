@@ -30,6 +30,11 @@ const Finder = () => {
       return;
     }
 
+    if (item.fileType === 'glb' || item.fileType === 'gltf') {
+      openWindow('model3d', item);
+      return;
+    }
+
     if (item.fileType === 'img') {
       openWindow(getImgWindowKey(item), item);
     }
@@ -72,7 +77,6 @@ const Finder = () => {
           {(activeLocation?.children ?? []).map((item) => (
             <li
               key={item.id}
-              className={item.position}
               onClick={() => openItem(item)}
             >
               <img src={item.icon} alt={item.name} />

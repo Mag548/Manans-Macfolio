@@ -6,5 +6,6 @@ import Text from '#windows/Text.jsx';
 import Image from '#windows/Image.jsx';
 import Contact from '#windows/Contact.jsx';
 import Photos from '#windows/Photos.jsx';
+import Model3D from '#windows/Model3D.jsx';
 
-export { Terminal, Safari, Resume, Finder, Text, Image, Contact, Photos };
+export { Terminal, Safari, Resume, Finder, Text, Image, Contact, Photos, Model3D };

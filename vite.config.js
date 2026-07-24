@@ -6,7 +6,8 @@ import { fileURLToPath } from 'url'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()], 
+  plugins: [react(), tailwindcss()],
+  assetsInclude: ['**/*.glb'],
   resolve: {
     alias: {
       '@': resolve(dirname(fileURLToPath(import.meta.url)), 'src'),
@@ -38,4 +39,3 @@ export default defineConfig({
     },
   },
 });
-
