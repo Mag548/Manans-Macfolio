@@ -18,7 +18,7 @@ export const terminalProfile = {
 };
 
 /** Stack used to build this portfolio site */
-const siteStack = [
+export const siteStack = [
   {
     category: 'Core',
     items: ['React 19', 'Vite'],
@@ -28,8 +28,8 @@ const siteStack = [
     items: ['Tailwind CSS v4', 'CSS'],
   },
   {
-    category: 'Motion',
-    items: ['GSAP', 'OGL (LineWaves)'],
+    category: '3D & Motion',
+    items: ['GSAP', 'OGL', 'Three.js', 'React Three Fiber'],
   },
   {
     category: 'State',

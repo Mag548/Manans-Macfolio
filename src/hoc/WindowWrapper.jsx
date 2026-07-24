@@ -195,7 +195,7 @@ const WindowWrapper = (Component, fixedWindowKey) => {
           trigger: header,
           allowEventDefault: true,
           ignore:
-            'a, button, input, textarea, select, canvas, .model3d-body, .model3d-body *, .terminal-body, .terminal-body *, .txtfile-body, .preview, #window-controls, #window-controls *, .zoom-controls, .zoom-controls *, .reset-size-btn',
+            'a, button, input, textarea, select, canvas, .model3d-body, .model3d-body *, .terminal-body, .terminal-body *, .txtfile-body, .preview, .content, .finder-item, .finder-item *, #window-controls, #window-controls *, .zoom-controls, .zoom-controls *, .reset-size-btn',
           onPress: () => focusWindow(windowKey),
         });
         draggableRef.current = instance;

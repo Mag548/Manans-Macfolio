@@ -86,7 +86,7 @@ const Navbar = () => {
       <nav className={!wifiEnabled ? 'nav-sleeping' : undefined}>
         <div>
           <img src="/images/logo.svg" alt="logo" />
-          <p className="font-bold">Manan's Portfolio</p>
+          <p className="font-bold">Manan's Macfolio</p>
           <ul>
             {navLinks.map(({ id, name, type }) => (
               <li key={id} onClick={() => openWindow(type)}>

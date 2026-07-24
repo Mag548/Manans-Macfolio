@@ -1,13 +1,20 @@
+import { useRef } from 'react';
 import { SearchIcon } from 'lucide-react';
+import gsap from 'gsap';
+import { Draggable } from 'gsap/Draggable';
+import { useGSAP } from '@gsap/react';
 import WindowWrapper from '#hoc/WindowWrapper.jsx';
 import WindowControls from '#components/WindowControls.jsx';
 import useLocationStore from '#store/location.js';
 import useWindowStore, { getImgWindowKey } from '#store/window.js';
 import { locations } from '#constants';
 
+gsap.registerPlugin(Draggable);
+
 const Finder = () => {
   const openWindow = useWindowStore((s) => s.openWindow);
   const { activeLocation, setActiveLocation } = useLocationStore();
+  const contentRef = useRef(null);
 
   const openItem = (item) => {
     if (item.fileType === 'pdf' || item.type === 'pdf' || item.type === 'resume') {
@@ -39,6 +46,39 @@ const Finder = () => {
       openWindow(getImgWindowKey(item), item);
     }
   };
+
+  const children = activeLocation?.children ?? [];
+
+  useGSAP(
+    () => {
+      const content = contentRef.current;
+      if (!content || !children.length) return;
+
+      const items = content.querySelectorAll('.finder-item');
+      if (!items.length) return;
+
+      // Reset transforms when switching folders
+      gsap.set(items, { x: 0, y: 0 });
+
+      const instances = Draggable.create(items, {
+        bounds: content,
+        edgeResistance: 0.85,
+        zIndexBoost: true,
+        cursor: 'grab',
+        activeCursor: 'grabbing',
+        onClick() {
+          const id = Number(this.target.dataset.itemId);
+          const item = children.find((child) => child.id === id);
+          if (item) openItem(item);
+        },
+      });
+
+      return () => {
+        instances.forEach((instance) => instance.kill());
+      };
+    },
+    { dependencies: [activeLocation?.id, children.length] }
+  );
 
   const renderList = (name, items) => (
     <div key={name}>
@@ -73,13 +113,14 @@ const Finder = () => {
           {renderList('Experiences', locations.experiences.children)}
         </div>
 
-        <ul className="content">
-          {(activeLocation?.children ?? []).map((item) => (
+        <ul className="content" ref={contentRef}>
+          {children.map((item) => (
             <li
-              key={item.id}
-              onClick={() => openItem(item)}
+              key={`${activeLocation?.id ?? 'root'}-${item.id}`}
+              className="finder-item"
+              data-item-id={item.id}
             >
-              <img src={item.icon} alt={item.name} />
+              <img src={item.icon} alt={item.name} draggable={false} />
               <p>{item.name}</p>
             </li>
           ))}
