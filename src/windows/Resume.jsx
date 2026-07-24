@@ -14,6 +14,9 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
+const RESUME_PDF = '/files/resume.pdf';
+const RESUME_DOWNLOAD_NAME = 'Manan_Goswami_CV.pdf';
+
 const ZOOM_MIN = 0.5;
 const ZOOM_MAX = 2.5;
 const ZOOM_STEP = 0.1;
@@ -144,8 +147,8 @@ const Resume = () => {
             Reset size
           </button>
           <a
-            href="/files/resume.pdf"
-            download
+            href={RESUME_PDF}
+            download={RESUME_DOWNLOAD_NAME}
             className="cursor-pointer"
             title="Download Resume"
           >
@@ -159,7 +162,7 @@ const Resume = () => {
         className={`resume-body${isZoomed ? ' is-zoomed' : ''}`}
       >
         <Document
-          file="/files/resume.pdf"
+          file={RESUME_PDF}
           onLoadSuccess={handleLoadSuccess}
           loading={<div className="resume-loading">Loading…</div>}
         >
