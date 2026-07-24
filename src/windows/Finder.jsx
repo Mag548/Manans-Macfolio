@@ -30,6 +30,11 @@ const Finder = () => {
       return;
     }
 
+    if (item.fileType === 'glb' || item.fileType === 'gltf') {
+      openWindow('model3d', item);
+      return;
+    }
+
     if (item.fileType === 'img') {
       openWindow(getImgWindowKey(item), item);
     }
@@ -65,14 +70,13 @@ const Finder = () => {
       <div className="window-body flex h-full min-h-0">
         <div className="sidebar">
           {renderList('Favourites', Object.values(locations))}
-          {renderList('Work', locations.work.children)}
+          {renderList('Experiences', locations.experiences.children)}
         </div>
 
         <ul className="content">
           {(activeLocation?.children ?? []).map((item) => (
             <li
               key={item.id}
-              className={item.position}
               onClick={() => openItem(item)}
             >
               <img src={item.icon} alt={item.name} />

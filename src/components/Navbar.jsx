@@ -5,14 +5,17 @@ import useWindowStore from '#store/window.js';
 import WifiMenu from '#components/WifiMenu.jsx';
 import ControlCentreMenu from '#components/ControlCentreMenu.jsx';
 import Spotlight from '#components/Spotlight.jsx';
+import ProfileLanyard from '#components/Lanyard/ProfileLanyard.jsx';
 
 const Navbar = () => {
   const { openWindow } = useWindowStore();
   const wifiWrapRef = useRef(null);
   const modeWrapRef = useRef(null);
+  const profileWrapRef = useRef(null);
   const [wifiOpen, setWifiOpen] = useState(false);
   const [modeOpen, setModeOpen] = useState(false);
   const [spotlightOpen, setSpotlightOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [wifiEnabled, setWifiEnabled] = useState(true);
   const [connectedId, setConnectedId] = useState('manan-hotspot');
   const [darkMode, setDarkMode] = useState(false);
@@ -20,6 +23,7 @@ const Navbar = () => {
   const openSpotlight = () => {
     setWifiOpen(false);
     setModeOpen(false);
+    setProfileOpen(false);
     setSpotlightOpen(true);
   };
 
@@ -73,6 +77,11 @@ const Navbar = () => {
       )}
 
       <Spotlight open={spotlightOpen} onClose={() => setSpotlightOpen(false)} />
+      <ProfileLanyard
+        open={profileOpen}
+        anchorRef={profileWrapRef}
+        onClose={() => setProfileOpen(false)}
+      />
 
       <nav className={!wifiEnabled ? 'nav-sleeping' : undefined}>
         <div>
@@ -101,6 +110,7 @@ const Navbar = () => {
                       onClick={() => {
                         setModeOpen(false);
                         setSpotlightOpen(false);
+                        setProfileOpen(false);
                         setWifiOpen((open) => !open);
                       }}
                     >
@@ -145,6 +155,27 @@ const Navbar = () => {
                 );
               }
 
+              if (type === 'profile') {
+                return (
+                  <li key={id} className="nav-wifi" ref={profileWrapRef}>
+                    <button
+                      type="button"
+                      className={`nav-wifi-btn${profileOpen ? ' is-open' : ''}`}
+                      aria-expanded={profileOpen}
+                      aria-label="Profile"
+                      onClick={() => {
+                        setWifiOpen(false);
+                        setModeOpen(false);
+                        setSpotlightOpen(false);
+                        setProfileOpen((open) => !open);
+                      }}
+                    >
+                      <img src={img} className="icon-hover" alt="" />
+                    </button>
+                  </li>
+                );
+              }
+
               if (type === 'mode') {
                 return (
                   <li key={id} className="nav-wifi" ref={modeWrapRef}>
@@ -156,6 +187,7 @@ const Navbar = () => {
                       onClick={() => {
                         setWifiOpen(false);
                         setSpotlightOpen(false);
+                        setProfileOpen(false);
                         setModeOpen((open) => !open);
                       }}
                     >

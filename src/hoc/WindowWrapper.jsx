@@ -176,24 +176,46 @@ const WindowWrapper = (Component, fixedWindowKey) => {
       const el = ref.current;
       if (!el) return;
 
-      const header = el.querySelector('#window-header');
-      const [instance] = Draggable.create(el, {
-        trigger: header || el,
-        ignore:
-          'a, button, input, textarea, select, #window-controls, #window-controls *, .zoom-controls, .zoom-controls *, .reset-size-btn',
-        onPress: () => focusWindow(windowKey),
-      });
-      draggableRef.current = instance;
+      let instance = null;
+      let cancelled = false;
+      let rafId = 0;
 
-      if (!visible || isMaximized) {
-        instance.disable();
-      }
+      const setup = () => {
+        if (cancelled) return;
+
+        const header = el.querySelector('#window-header');
+        // Wait until the window chrome exists — never use the whole panel as trigger
+        if (!header) {
+          rafId = requestAnimationFrame(setup);
+          return;
+        }
+
+        instance?.kill();
+        [instance] = Draggable.create(el, {
+          trigger: header,
+          allowEventDefault: true,
+          ignore:
+            'a, button, input, textarea, select, canvas, .model3d-body, .model3d-body *, .terminal-body, .terminal-body *, .txtfile-body, .preview, #window-controls, #window-controls *, .zoom-controls, .zoom-controls *, .reset-size-btn',
+          onPress: () => focusWindow(windowKey),
+        });
+        draggableRef.current = instance;
+
+        if (!visible || isMaximized) {
+          instance.disable();
+        }
+      };
+
+      setup();
 
       return () => {
+        cancelled = true;
+        if (rafId) cancelAnimationFrame(rafId);
         instance?.kill();
-        draggableRef.current = null;
+        if (draggableRef.current === instance) {
+          draggableRef.current = null;
+        }
       };
-    }, []);
+    }, [visible, windowKey, isMaximized]);
 
     const animateToOriginalSize = useCallback(() => {
       const el = ref.current;

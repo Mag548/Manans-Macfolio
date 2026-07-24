@@ -20,7 +20,7 @@ const SPOTLIGHT_APPS = [
   },
 ].map((app) => {
   const aliases = {
-    finder: ['Finder', 'Projects', 'Portfolio'],
+    finder: ['Finder', 'Experiences', 'Portfolio', 'Projects'],
     safari: ['Safari', 'Articles', 'Blog'],
     photos: ['Photos', 'Gallery'],
     contact: ['Contact', 'Mail', 'Email'],

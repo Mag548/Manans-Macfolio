@@ -4,7 +4,7 @@ import { Draggable } from 'gsap/Draggable';
 import { Dock, Navbar, Welcome, Home } from '#components';
 import LineWaves from '#components/LineWaves/LineWaves.jsx';
 // Kept for easy revert: import DotField from '#components/DotField/DotField.jsx';
-import { Terminal, Safari, Resume, Finder, Text, Image, Contact, Photos } from '#windows';
+import { Terminal, Safari, Resume, Finder, Text, Image, Contact, Photos, Model3D } from '#windows';
 
 gsap.registerPlugin(Draggable);
 
@@ -43,6 +43,7 @@ const App = () => {
       <Image />
       <Contact />
       <Photos />
+      <Model3D />
     </main>
   );
 };
