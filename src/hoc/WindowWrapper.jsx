@@ -37,6 +37,8 @@ const MAXIMIZED_STYLE = {
   maxWidth: 'none',
   height: 'auto',
   transform: 'none',
+  marginLeft: 0,
+  marginTop: 0,
 };
 
 const RESIZE_HANDLES = [
@@ -60,14 +62,43 @@ const clearInlineSize = (el) => {
   });
 };
 
-const WindowWrapper = (Component, windowKey) => {
+const VIEWPORT_PAD = { top: 52, right: 12, bottom: 100, left: 12 };
+
+const clampWindowToViewport = (el) => {
+  if (!el || el.classList.contains('is-maximized')) return;
+
+  const rect = el.getBoundingClientRect();
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const { top, right, bottom, left } = VIEWPORT_PAD;
+
+  let dx = 0;
+  let dy = 0;
+
+  if (rect.right > vw - right) dx -= rect.right - (vw - right);
+  if (rect.left + dx < left) dx = left - rect.left;
+
+  if (rect.bottom > vh - bottom) dy -= rect.bottom - (vh - bottom);
+  if (rect.top + dy < top) dy = top - rect.top;
+
+  if (!dx && !dy) return;
+
+  const x = Number(gsap.getProperty(el, 'x')) || 0;
+  const y = Number(gsap.getProperty(el, 'y')) || 0;
+  gsap.set(el, { x: x + dx, y: y + dy, xPercent: 0, yPercent: 0 });
+};
+
+const WindowWrapper = (Component, fixedWindowKey) => {
   const Wrapped = (props) => {
+    const windowKey = props.windowKey ?? fixedWindowKey;
     const { windows, focusWindow, maximizeWindow } = useWindowStore();
     const {
       isOpen = false,
       isMinimized = false,
       isMaximized = false,
       zIndex = 0,
+      offsetX = 0,
+      offsetY = 0,
     } = windows[windowKey] ?? {};
     const ref = useRef(null);
     const draggableRef = useRef(null);
@@ -83,10 +114,11 @@ const WindowWrapper = (Component, windowKey) => {
       el.style.display = visible ? 'flex' : 'none';
 
       if (visible && !isMaximized) {
+        clampWindowToViewport(el);
         draggableRef.current?.enable();
         draggableRef.current?.update(true);
       }
-    }, [visible, isMaximized]);
+    }, [visible, isMaximized, offsetX, offsetY]);
 
     useLayoutEffect(() => {
       const el = ref.current;
@@ -108,6 +140,7 @@ const WindowWrapper = (Component, windowKey) => {
           yPercent: 0,
         });
         if (visible) {
+          clampWindowToViewport(el);
           instance?.enable();
           instance?.update(true);
         }
@@ -129,7 +162,10 @@ const WindowWrapper = (Component, windowKey) => {
             duration: 0.35,
             ease: 'power3.out',
             transformOrigin: '50% 50%',
-            onComplete: () => draggableRef.current?.update(true),
+            onComplete: () => {
+              clampWindowToViewport(el);
+              draggableRef.current?.update(true);
+            },
           }
         );
       },
@@ -301,9 +337,13 @@ const WindowWrapper = (Component, windowKey) => {
             zIndex,
             display: visible ? 'flex' : 'none',
             flexDirection: 'column',
+            marginLeft: offsetX || undefined,
+            marginTop: offsetY || undefined,
             ...(isMaximized ? MAXIMIZED_STYLE : {}),
           }}
-          className={`absolute window-frame${isMaximized ? ' is-maximized' : ''}`}
+          className={`absolute window-frame${isMaximized ? ' is-maximized' : ''}${
+            String(windowKey).startsWith('imgfile') ? ' imgfile' : ''
+          }`}
         >
           <Component {...props} />
 

@@ -1,59 +1,100 @@
+import { useEffect, useRef, useState } from 'react';
 import WindowWrapper from '#hoc/WindowWrapper.jsx';
-import { techStack } from '#constants';
-import { Check, Flag } from 'lucide-react';
 import WindowControls from '#components/WindowControls.jsx';
+import useWindowStore from '#store/window.js';
+import { BOOT_MESSAGE, runCommand } from '#constants/terminal.js';
 
+const PROMPT = '@manan %';
 
 const Terminal = () => {
-  return ( 
-  <>
-  <div id="window-header">
-    <WindowControls target="terminal" />
-    <h2>Tech Stack</h2>
-  </div>
+  const isOpen = useWindowStore((s) => s.windows.terminal?.isOpen);
+  const isMinimized = useWindowStore((s) => s.windows.terminal?.isMinimized);
+  const inputRef = useRef(null);
+  const bottomRef = useRef(null);
+  const [value, setValue] = useState('');
+  const [history, setHistory] = useState([
+    { type: 'system', text: BOOT_MESSAGE },
+  ]);
 
-  <div className="techstack"> 
-    <p>
-        <span className="font-bold">@manan % </span>
-        show tech stack
-    </p>
+  const focusInput = () => {
+    inputRef.current?.focus();
+  };
 
-    <div className="label">
-        <p className="w-32">Category</p>
-        <p> Technologies </p>
-    </div>
+  useEffect(() => {
+    if (isOpen && !isMinimized) {
+      focusInput();
+    }
+  }, [isOpen, isMinimized]);
 
-    <ul className="content"> 
-        {techStack.map(({category, items })=> (
-        <li key={category} className="flex items-center">
-            <Check className="check" size={20} />
-            <h3>{category}</h3>
-            <ul>
-                {items.map((item, i)=> (
-                    <li key={i}>
-                        {item} 
-                        {i < items.length - 1 ? ',' : ''}
-                    </li>
-                ))}
-            </ul>
-        </li>
-        ))}
-    </ul>
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }, [history, value]);
 
-    <div className="footnote"> 
-        <p>
-            <Check size={20} /> All stacks loaded successfully (100%)
-        </p>
-        <p className="text-black">
-            <Flag size={15} fill="black" />
-            Render time: 67ms 
-        </p>
-    </div>
-  </div>
-  </> )
+  const submit = (event) => {
+    event.preventDefault();
+    const raw = value;
+    if (!raw.trim()) {
+      setValue('');
+      return;
+    }
+
+    const echoed = { type: 'input', text: `${PROMPT} ${raw.trim()}` };
+    const result = runCommand(raw);
+
+    if (result.clear) {
+      setHistory([{ type: 'system', text: BOOT_MESSAGE }]);
+      setValue('');
+      return;
+    }
+
+    setHistory((prev) => [...prev, echoed, ...result.lines]);
+    setValue('');
+  };
+
+  return (
+    <>
+      <div id="window-header">
+        <WindowControls target="terminal" />
+        <h2>Terminal</h2>
+      </div>
+
+      <div className="terminal-body" onClick={focusInput}>
+        {history.map((entry, i) => {
+          if (entry.type === 'link' && entry.href) {
+            return (
+              <p key={i} className="terminal-line terminal-link">
+                <a href={entry.href} target="_blank" rel="noreferrer">
+                  {entry.text}
+                </a>
+              </p>
+            );
+          }
+
+          return (
+            <p key={i} className={`terminal-line terminal-${entry.type}`}>
+              {entry.text}
+            </p>
+          );
+        })}
+
+        <form className="terminal-input-row" onSubmit={submit}>
+          <span className="terminal-prompt">{PROMPT}</span>
+          <input
+            ref={inputRef}
+            type="text"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            autoComplete="off"
+            spellCheck={false}
+            aria-label="Terminal command"
+          />
+        </form>
+        <div ref={bottomRef} />
+      </div>
+    </>
+  );
 };
 
 const TerminalWindow = WindowWrapper(Terminal, 'terminal');
-
 
 export default TerminalWindow;
