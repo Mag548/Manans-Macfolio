@@ -327,6 +327,17 @@ const navLinks = [
             position: "top-44 right-14",
             imageUrl: "/images/quickfix.png",
           },
+          {
+            id: 7,
+            name: "BattleOfTheAdsWinner.mp4",
+            icon: "/images/video.png",
+            kind: "file",
+            fileType: "video",
+            position: "top-28 left-28",
+            videoUrl: "/videos/Final_BOA.mov",
+            description:
+              "Winner of the Battle of the Ads competition JA 2026",
+          },
         ],
       },
 

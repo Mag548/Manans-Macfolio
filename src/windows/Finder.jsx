@@ -6,7 +6,7 @@ import { useGSAP } from '@gsap/react';
 import WindowWrapper from '#hoc/WindowWrapper.jsx';
 import WindowControls from '#components/WindowControls.jsx';
 import useLocationStore from '#store/location.js';
-import useWindowStore, { getImgWindowKey } from '#store/window.js';
+import useWindowStore, { getImgWindowKey, getVideoWindowKey } from '#store/window.js';
 import { locations } from '#constants';
 
 gsap.registerPlugin(Draggable);
@@ -44,6 +44,11 @@ const Finder = () => {
 
     if (item.fileType === 'img') {
       openWindow(getImgWindowKey(item), item);
+      return;
+    }
+
+    if (item.fileType === 'video') {
+      openWindow(getVideoWindowKey(item), item);
     }
   };
 

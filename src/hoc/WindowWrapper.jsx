@@ -195,7 +195,7 @@ const WindowWrapper = (Component, fixedWindowKey) => {
           trigger: header,
           allowEventDefault: true,
           ignore:
-            'a, button, input, textarea, select, canvas, .model3d-body, .model3d-body *, .terminal-body, .terminal-body *, .txtfile-body, .preview, .content, .finder-item, .finder-item *, #window-controls, #window-controls *, .zoom-controls, .zoom-controls *, .reset-size-btn',
+            'a, button, input, textarea, select, canvas, .model3d-body, .model3d-body *, .terminal-body, .terminal-body *, .txtfile-body, .preview, .content, .finder-item, .finder-item *, #window-controls, #window-controls *, .zoom-controls, .zoom-controls *, .reset-size-btn, .video-controls, .video-controls *, .video-body, .video-body *',
           onPress: () => focusWindow(windowKey),
         });
         draggableRef.current = instance;
@@ -365,7 +365,7 @@ const WindowWrapper = (Component, fixedWindowKey) => {
           }}
           className={`absolute window-frame${isMaximized ? ' is-maximized' : ''}${
             String(windowKey).startsWith('imgfile') ? ' imgfile' : ''
-          }`}
+          }${String(windowKey).startsWith('videofile') ? ' videofile' : ''}`}
         >
           <Component {...props} />
 

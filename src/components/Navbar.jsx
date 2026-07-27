@@ -124,6 +124,7 @@ const Navbar = () => {
                         <WifiMenu
                           wifiEnabled={wifiEnabled}
                           connectedId={connectedId}
+                          darkMode={darkMode}
                           onToggleWifi={handleToggleWifi}
                           onSelectNetwork={(networkId) => {
                             setWifiEnabled(true);

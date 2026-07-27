@@ -6,12 +6,12 @@ const ControlCentreMenu = ({ darkMode, onToggleDarkMode, onOpenSpotlight }) => {
     <BorderGlow
       className="wifi-menu"
       borderRadius={16}
-      backgroundColor="rgba(255, 255, 255, 0.12)"
+      backgroundColor={darkMode ? '#2c2c2e' : '#f2f2f4'}
       glowColor="270 80 75"
       glowRadius={28}
       glowIntensity={0.55}
       colors={['#c084fc', '#a855f7', '#38bdf8']}
-      fillOpacity={0.18}
+      fillOpacity={0}
       animated={false}
     >
       <div className="wifi-menu-inner">
