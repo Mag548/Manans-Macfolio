@@ -334,7 +334,7 @@ const navLinks = [
             kind: "file",
             fileType: "video",
             position: "top-28 left-28",
-            videoUrl: "/videos/Final_BOA.mov",
+            videoUrl: "/videos/Final_BOA.mp4",
             description:
               "Winner of the Battle of the Ads competition JA 2026",
           },
