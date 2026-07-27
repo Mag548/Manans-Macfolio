@@ -194,23 +194,15 @@ body {
   }
 
   .wifi-menu {
-    @apply w-full overflow-visible border border-white/25;
-    background: linear-gradient(
-      165deg,
-      rgba(255, 255, 255, 0.22) 0%,
-      rgba(255, 255, 255, 0.08) 45%,
-      rgba(20, 20, 28, 0.28) 100%
-    ) !important;
-    backdrop-filter: blur(28px) saturate(180%);
-    -webkit-backdrop-filter: blur(28px) saturate(180%);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.35),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.06),
-      0 10px 40px rgba(0, 0, 0, 0.28) !important;
+    @apply w-full overflow-visible rounded-xl border border-black/10 shadow-xl;
+    /* Solid fill matching the menu bar’s frosted white/gray look */
+    background: #f2f2f4 !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   .wifi-menu-inner {
-    @apply flex flex-col w-full text-white;
+    @apply flex flex-col w-full text-gray-900;
 
     ul {
       @apply flex flex-col gap-0.5 items-stretch w-full m-0 p-0 list-none;
@@ -222,10 +214,10 @@ body {
   }
 
   .wifi-menu-header {
-    @apply flex items-center justify-between px-4 py-3 border-b border-white/10 shrink-0;
+    @apply flex items-center justify-between px-4 py-3 border-b border-black/10 shrink-0;
 
     h3 {
-      @apply m-0 text-[15px] font-semibold tracking-tight;
+      @apply m-0 text-[15px] font-semibold tracking-tight text-gray-900;
     }
 
     .cc-menu-label {
@@ -242,7 +234,7 @@ body {
   }
 
   .wifi-toggle {
-    @apply relative w-11 h-6 rounded-full border-none cursor-pointer bg-white/20 transition-colors p-0.5 shrink-0;
+    @apply relative w-11 h-6 rounded-full border-none cursor-pointer bg-black/15 transition-colors p-0.5 shrink-0;
 
     &.is-on {
       @apply bg-[#A855F7];
@@ -258,7 +250,7 @@ body {
   }
 
   .wifi-off {
-    @apply flex flex-col items-center justify-center gap-2 py-10 text-white/50;
+    @apply flex flex-col items-center justify-center gap-2 py-10 text-gray-400;
 
     p {
       @apply m-0 text-sm;
@@ -266,23 +258,23 @@ body {
   }
 
   .wifi-section {
-    @apply px-2 py-2 border-b border-white/10 last:border-b-0 w-full;
+    @apply px-2 py-2 border-b border-black/10 last:border-b-0 w-full;
 
     h4 {
-      @apply m-0 px-2 pb-1.5 pt-1 text-xs font-medium text-white/45;
+      @apply m-0 px-2 pb-1.5 pt-1 text-xs font-medium text-gray-500;
     }
   }
 
   .wifi-row {
-    @apply w-full flex flex-row items-center gap-2.5 px-2 py-2 rounded-lg border-none bg-transparent text-left text-white cursor-pointer hover:bg-white/10 transition-colors;
+    @apply w-full flex flex-row items-center gap-2.5 px-2 py-2 rounded-lg border-none bg-transparent text-left text-gray-900 cursor-pointer hover:bg-black/5 transition-colors;
 
     &.is-active {
-      @apply bg-white/5;
+      @apply bg-black/[0.04];
     }
   }
 
   .wifi-row-icon {
-    @apply size-7 shrink-0 rounded-full bg-white/15 text-white flex items-center justify-center;
+    @apply size-7 shrink-0 rounded-full bg-black/10 text-gray-700 flex items-center justify-center;
 
     &.is-active {
       @apply bg-[#A855F7] text-white;
@@ -294,7 +286,7 @@ body {
   }
 
   .wifi-row-meta {
-    @apply flex items-center gap-1.5 shrink-0 text-white/55;
+    @apply flex items-center gap-1.5 shrink-0 text-gray-500;
   }
 
   .wifi-cellular {
@@ -302,7 +294,7 @@ body {
   }
 
   .wifi-lock {
-    @apply text-white/45;
+    @apply text-gray-400;
   }
 
   .wifi-signal {
@@ -310,7 +302,7 @@ body {
   }
 
   .wifi-signal-bar {
-    @apply w-0.5 rounded-sm bg-white/25;
+    @apply w-0.5 rounded-sm bg-black/20;
 
     &:nth-child(1) {
       @apply h-1.5;
@@ -325,7 +317,7 @@ body {
     }
 
     &.is-on {
-      @apply bg-white/80;
+      @apply bg-gray-800;
     }
   }
 
@@ -960,6 +952,59 @@ body {
     }
   }
 
+  .videofile {
+    @apply absolute top-36 left-[max(0.75rem,10%)] w-fit max-w-[calc(100vw-1.5rem)] h-fit bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    max-height: min(85vh, calc(100dvh - 6rem));
+
+    #window-header {
+      @apply shrink-0 min-w-0;
+
+      h2 {
+        @apply font-bold text-sm text-center w-full min-w-0 truncate px-2 text-[#5f6266];
+      }
+    }
+
+    .video-body {
+      @apply flex flex-col min-h-0 flex-1 bg-[#e8e8ed];
+    }
+
+    .preview {
+      @apply flex flex-1 min-h-0 w-full items-center justify-center overflow-hidden p-2 bg-[#d1d1d6];
+
+      video {
+        @apply block w-full h-full max-w-full max-h-full object-contain object-center bg-black cursor-pointer;
+      }
+    }
+
+    &.is-maximized .preview {
+      @apply p-0;
+    }
+
+    .video-description {
+      @apply m-0 shrink-0 px-3 py-2 text-xs leading-relaxed text-[#3a3a3c] bg-[#f2f2f7] border-t border-black/5;
+    }
+
+    .video-controls {
+      @apply shrink-0 flex items-center gap-2 px-3 py-2 bg-[#f2f2f7] border-t border-black/5;
+    }
+
+    .video-control-btn {
+      @apply inline-flex items-center justify-center size-7 rounded-md text-[#1d1d1f] hover:bg-black/8 transition-colors;
+    }
+
+    .video-time {
+      @apply text-[11px] tabular-nums text-[#6e6e73] min-w-[2.25rem];
+    }
+
+    .video-scrubber {
+      @apply flex-1 min-w-0 h-1.5 accent-[#1d1d1f] cursor-pointer;
+    }
+
+    .video-volume {
+      @apply w-20 h-1.5 accent-[#1d1d1f] cursor-pointer;
+    }
+  }
+
   #home {
     @apply absolute inset-0 z-[5] max-sm:hidden pointer-events-none;
 
@@ -990,7 +1035,8 @@ body {
     #resume,
     #txtfile,
     #model3d,
-    .imgfile {
+    .imgfile,
+    .videofile {
       @apply bg-[#1c1c1e] text-white;
 
       #window-header {
@@ -1200,6 +1246,102 @@ body {
     .imgfile {
       .preview {
         @apply bg-[#2c2c2e];
+      }
+    }
+
+    .videofile {
+      .video-body {
+        @apply bg-[#1c1c1e];
+      }
+
+      .preview {
+        @apply bg-[#000];
+      }
+
+      .video-description {
+        @apply text-white/70 bg-[#2c2c2e] border-white/10;
+      }
+
+      .video-controls {
+        @apply bg-[#2c2c2e] border-white/10;
+      }
+
+      .video-control-btn {
+        @apply text-white/80 hover:bg-white/10 hover:text-white;
+      }
+
+      .video-time {
+        @apply text-white/50;
+      }
+
+      .video-scrubber,
+      .video-volume {
+        @apply accent-white;
+      }
+    }
+
+    .wifi-menu {
+      @apply border-white/10;
+      background: #2c2c2e !important;
+    }
+
+    .wifi-menu-inner {
+      @apply text-white;
+    }
+
+    .wifi-menu-header {
+      @apply border-white/10;
+
+      h3 {
+        @apply text-white;
+      }
+    }
+
+    .wifi-toggle {
+      @apply bg-white/20;
+    }
+
+    .wifi-off {
+      @apply text-white/45;
+    }
+
+    .wifi-section {
+      @apply border-white/10;
+
+      h4 {
+        @apply text-white/45;
+      }
+    }
+
+    .wifi-row {
+      @apply text-white hover:bg-white/10;
+
+      &.is-active {
+        @apply bg-white/5;
+      }
+    }
+
+    .wifi-row-icon {
+      @apply bg-white/15 text-white;
+
+      &.is-active {
+        @apply bg-[#A855F7] text-white;
+      }
+    }
+
+    .wifi-row-meta {
+      @apply text-white/55;
+    }
+
+    .wifi-lock {
+      @apply text-white/45;
+    }
+
+    .wifi-signal-bar {
+      @apply bg-white/25;
+
+      &.is-on {
+        @apply bg-white/80;
       }
     }
   }

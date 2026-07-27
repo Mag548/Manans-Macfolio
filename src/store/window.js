@@ -21,6 +21,14 @@ export const getImgWindowKey = (item) => {
   return `imgfile-${slug}`;
 };
 
+export const getVideoWindowKey = (item) => {
+  const source = item?.videoUrl || item?.id || 'video';
+  const slug = String(source)
+    .replace(/^\/videos\//, '')
+    .replace(/\W+/g, '-');
+  return `videofile-${slug}`;
+};
+
 const useWindowStore = create(
   immer((set) => ({
     windows: WINDOW_CONFIG,
@@ -29,12 +37,19 @@ const useWindowStore = create(
     openWindow: (windowKey, data = null) =>
       set((state) => {
         if (!state.windows[windowKey]) {
-          const openImages = Object.keys(state.windows).filter((key) =>
-            key.startsWith('imgfile-')
-          ).length;
+          const prefix = windowKey.startsWith('videofile-')
+            ? 'videofile-'
+            : windowKey.startsWith('imgfile-')
+              ? 'imgfile-'
+              : null;
+          const openCount = prefix
+            ? Object.keys(state.windows).filter((key) =>
+                key.startsWith(prefix)
+              ).length
+            : 0;
           state.windows[windowKey] = createWindowState({
-            offsetX: openImages * 28,
-            offsetY: openImages * 28,
+            offsetX: openCount * 28,
+            offsetY: openCount * 28,
           });
         }
 
